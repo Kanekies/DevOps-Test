@@ -67,3 +67,15 @@ variable "single_nat_gateway" {
   description = "One shared NAT gateway instead of one per AZ"
   default     = false
 }
+
+variable "enable_interface_endpoints" {
+  type        = bool
+  description = "Cost/isolation trade-off"
+  default     = true
+}
+
+variable "log_retention_days" {
+  type        = number
+  description = "How long VPC flow logs are kept in CloudWatch"
+  default     = 365
+}
