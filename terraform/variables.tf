@@ -13,8 +13,57 @@ variable "db_username" {
   default = "billing_admin"
 }
 
-variable "admin_user_name" {
+variable "project" {
   type        = string
-  default     = "platform-admin"
-  description = "INTENTIONALLY BAD: shared admin IAM user"
+  description = "Project slug used as a name prefix"
+  default     = "acme"
+}
+
+variable "tier" {
+  type        = string
+  description = "Commercial tier of the cell"
+  default     = "enterprise"
+
+  validation {
+    condition     = contains(["standard", "enterprise", "regulated"], var.tier)
+    error_message = "Choose the right tier!"
+  }
+}
+
+variable "allowed_account_ids" {
+  type        = list(string)
+  description = "Refuse to run against any other account"
+}
+
+variable "owner" {
+  type    = string
+  default = "platform-team"
+}
+
+variable "data_classification" {
+  type    = string
+  default = "confidential"
+}
+
+variable "vpc_cidr" {
+  type        = string
+  description = "Address range for the cell VPC"
+  default     = "10.100.0.0/16"
+}
+
+variable "az_count" {
+  type        = number
+  description = "How many availability zones this cell spans"
+  default     = 3
+
+  validation {
+    condition     = var.az_count >= 2 && var.az_count <= 3
+    error_message = "az_count must be 2 or 3."
+  }
+}
+
+variable "single_nat_gateway" {
+  type        = bool
+  description = "One shared NAT gateway instead of one per AZ"
+  default     = false
 }
