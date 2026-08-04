@@ -59,8 +59,8 @@ jobs:
 
       - name: Lint Helm chart
         run: |
-          helm lint charts/billing-service -f charts/billing-service/values.production.yaml
-          helm template charts/billing-service -f charts/billing-service/values.production.yaml > /dev/null
+          helm lint charts/billing-service -f charts/billing-service/values_production.yaml
+          helm template charts/billing-service -f charts/billing-service/values_production.yaml > /dev/null
 
   build:
     name: Build, scan and push image
