@@ -42,6 +42,7 @@ resource "aws_instance" "k3s_node" {
   ami                    = data.aws_ami.amazon_linux.id
   instance_type          = "t3.medium"
   subnet_id              = aws_subnet.private[0].id
+  iam_instance_profile   = aws_iam_instance_profile.k3s_node.name
   vpc_security_group_ids = [aws_security_group.k3s_node.id]
 
   tags = {

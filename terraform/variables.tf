@@ -85,3 +85,10 @@ variable "byok_key_arn" {
   description = "Customer-supplied KMS key. Empty - key is used."
   default     = ""
 }
+
+variable "github_repository" {
+  type        = string
+  description = "GitHub repository allowed to assume the deploy role, in owner/name form"
+  default     = "Kanekies/DevOps-Test"
+}
+
