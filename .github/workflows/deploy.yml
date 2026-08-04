@@ -35,7 +35,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
           cache: npm
 
       - name: Install dependencies
@@ -61,6 +61,7 @@ jobs:
     name: Build, scan and push image
     runs-on: ubuntu-latest
     needs: static-analysis
+    if: vars.CELL_01_DEPLOY_ROLE_ARN != ''
     permissions:
       contents: read
       id-token: write
@@ -110,6 +111,7 @@ jobs:
     name: Deploy to cell-01
     runs-on: ubuntu-latest
     needs: build
+    if: vars.CELL_01_DEPLOY_ROLE_ARN != ''
     environment: cell-01
     permissions:
       contents: read
