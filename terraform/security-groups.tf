@@ -1,3 +1,13 @@
+# Egress on 443 must remain open to 0.0.0.0/0: security groups match on IP
+# ranges, not on domain names, and the workload calls external APIs whose
+# addresses are not known in advance. Domain-level filtering is delegated to
+# AWS Network Firewall in front of the NAT gateways - see A2 in the
+# architecture proposal. AWS-service traffic already bypasses this path via
+# VPC endpoints.
+#trivy:ignore:AVD-AWS-0104
+resource "aws_security_group" "k3s_node" {
+  name        = "${local.name_prefix}-k3s-node"
+  description = "k3s control plane and billing workloads"
 resource "aws_security_group" "k3s_node" {
   name        = "${local.name_prefix}-k3s-node"
   description = "k3s control plane and billing workloads"
