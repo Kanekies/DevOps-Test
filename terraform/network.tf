@@ -205,6 +205,7 @@ resource "aws_vpc_endpoint" "interface" {
 resource "aws_cloudwatch_log_group" "vpc_flow" {
   name              = "/aws/vpc/${local.name_prefix}/flow-logs"
   retention_in_days = var.log_retention_days
+  kms_key_id        = local.encryption_key_arn
 
   tags = {
     Name = "${local.name_prefix}-vpc-flow-logs"

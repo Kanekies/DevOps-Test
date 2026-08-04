@@ -64,7 +64,7 @@ variable "az_count" {
 
 variable "single_nat_gateway" {
   type        = bool
-  description = "One shared NAT gateway instead of one per AZ"
+  description = "One shared NAT gateway"
   default     = false
 }
 
@@ -76,6 +76,12 @@ variable "enable_interface_endpoints" {
 
 variable "log_retention_days" {
   type        = number
-  description = "How long VPC flow logs are kept in CloudWatch"
+  description = "How long VPC flow logs live in CloudWatch"
   default     = 365
+}
+
+variable "byok_key_arn" {
+  type        = string
+  description = "Customer-supplied KMS key. Empty - key is used."
+  default     = ""
 }
