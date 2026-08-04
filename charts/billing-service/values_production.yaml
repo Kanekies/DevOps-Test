@@ -1,0 +1,81 @@
+replicaCount: 3
+
+image:
+  repository: 111122223333.dkr.ecr.eu-central-1.amazonaws.com/acme-cell-01/billing-service
+  pullPolicy: Always
+
+env:
+  NODE_ENV: production
+  LOG_LEVEL: warn
+  PORT: "8080"
+  DB_HOST: acme-cell-01-billing.REPLACE.eu-central-1.rds.amazonaws.com
+  DB_PORT: "5432"
+  DB_NAME: billing
+  DB_SSL_MODE: verify-full
+  AWS_REGION: eu-central-1
+  S3_EXPORT_BUCKET: acme-cell-01-billing-exports-REPLACE
+
+externalSecrets:
+  enabled: true
+  secretStoreRef: aws-secrets-manager
+  remoteSecretArn: arn:aws:secretsmanager:eu-central-1:111122223333:secret:rds-REPLACE
+  refreshInterval: 1h
+
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::111122223333:role/acme-cell-01-billing-service
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+networkPolicy:
+  enabled: true
+  allowedNamespace: api-gateway
+  allowedPodLabel: api-gateway
+# Значения для выделенной ячейки cell-01 (Enterprise).
+replicaCount: 3
+
+image:
+  repository: 111122223333.dkr.ecr.eu-central-1.amazonaws.com/acme-cell-01/billing-service
+  pullPolicy: Always
+
+env:
+  NODE_ENV: production
+  LOG_LEVEL: warn
+  PORT: "8080"
+  DB_HOST: acme-cell-01-billing.REPLACE.eu-central-1.rds.amazonaws.com
+  DB_PORT: "5432"
+  DB_NAME: billing
+  DB_SSL_MODE: verify-full
+  AWS_REGION: eu-central-1
+  S3_EXPORT_BUCKET: acme-cell-01-billing-exports-REPLACE
+
+externalSecrets:
+  enabled: true
+  secretStoreRef: aws-secrets-manager
+  remoteSecretArn: arn:aws:secretsmanager:eu-central-1:111122223333:secret:rds-REPLACE
+  refreshInterval: 1h
+
+serviceAccount:
+  create: true
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::111122223333:role/acme-cell-01-billing-service
+
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: "1"
+    memory: 1Gi
+
+networkPolicy:
+  enabled: true
+  allowedNamespace: api-gateway
+  allowedPodLabel: api-gateway

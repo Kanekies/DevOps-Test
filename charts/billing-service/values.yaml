@@ -1,31 +1,91 @@
-# INTENTIONALLY INSECURE - candidate must fix
-
-replicaCount: 1
+replicaCount: 2
 
 image:
-  repository: 123456789012.dkr.ecr.eu-central-1.amazonaws.com/billing-service/app
-  tag: latest
-  pullPolicy: Always
+  repository: billing-service
+  tag: ""
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  name: ""
+  annotations: {}
 
 service:
   type: ClusterIP
-  port: 3000
-
-ingress:
-  enabled: false
-  hostname: cell-01.platform.example.com
-
-# BAD: secrets in plain text
-secrets:
-  dbPassword: "change-me-in-production"
-  jwtSecret: "super-secret-jwt-key-do-not-use"
-  stripeKey: "sk_test_placeholder"
+  port: 8080
 
 env:
-  nodeEnv: development
-  pgSslMode: no-verify
-  devExposeTokens: "true"
-  adminSeedPassword: "change-me"
+  NODE_ENV: production
+  LOG_LEVEL: info
+  PORT: "8080"
+  DB_HOST: ""
+  DB_PORT: "5432"
+  DB_NAME: billing
+  DB_SSL_MODE: require
+  AWS_REGION: eu-central-1
+  S3_EXPORT_BUCKET: ""
 
-resources: {}
-# INTENTIONALLY MISSING: limits, securityContext, probes, NetworkPolicy
+database:
+  secretName: billing-db-credentials
+  usernameKey: username
+  passwordKey: password
+
+externalSecrets:
+  enabled: false
+  secretStoreRef: aws-secrets-manager
+  remoteSecretArn: ""
+  refreshInterval: 1h
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  privileged: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+
+probes:
+  liveness:
+    path: /healthz
+    initialDelaySeconds: 15
+    periodSeconds: 20
+    timeoutSeconds: 3
+    failureThreshold: 3
+  readiness:
+    path: /readyz
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 3
+    failureThreshold: 3
+  startup:
+    path: /healthz
+    periodSeconds: 5
+    failureThreshold: 30
+
+networkPolicy:
+  enabled: true
+  allowedNamespace: api-gateway
+  allowedPodLabel: api-gateway
+
+nodeSelector: {}
+tolerations: []
+affinity: {}

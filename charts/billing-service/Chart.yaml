@@ -1,6 +1,6 @@
 apiVersion: v2
 name: billing-service
-description: Billing service Helm chart for DevOps assessment
+description: Billing service for Acme Platform dedicated cells
 type: application
-version: 0.1.0
-appVersion: "0.0.1"
+version: 0.2.0
+appVersion: "1.0.0"
