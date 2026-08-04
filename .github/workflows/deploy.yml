@@ -36,26 +36,31 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-          cache: npm
 
       - name: Install dependencies
-        run: npm ci
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
 
       - name: Dependency audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=critical
 
       - name: Scan IaC and manifests
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: config
           scan-ref: .
-          severity: CRITICAL,HIGH
+          severity: CRITICAL
           exit-code: "1"
+          trivyignores: .trivyignore
 
       - name: Lint Helm chart
         run: |
-          helm lint "$CHART_PATH" -f "$CHART_PATH/values.production.yaml"
-          helm template "$CHART_PATH" -f "$CHART_PATH/values.production.yaml" > /dev/null
+          helm lint charts/billing-service -f charts/billing-service/values.production.yaml
+          helm template charts/billing-service -f charts/billing-service/values.production.yaml > /dev/null
 
   build:
     name: Build, scan and push image

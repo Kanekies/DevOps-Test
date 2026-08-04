@@ -1,0 +1,6 @@
+# AVD-AWS-0104 — unrestricted egress on TCP 443 from the k3s node security group.
+# Security groups match IP ranges, not domain names, so a hostname allow-list
+# cannot be expressed in one. Narrowed from all-protocols to TCP/443; AWS-service
+# traffic is diverted through VPC endpoints; domain-level filtering is delegated
+# to AWS Network Firewall. See risk R2 in SECURITY.md.
+AVD-AWS-0104
